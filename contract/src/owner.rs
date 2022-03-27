@@ -29,7 +29,8 @@ pub(crate) fn assert_valid_tx(nonce: u64) -> String {
 
     let mut sig_bytes = hex_decode(&data[10..140]);
     sig_bytes[64] -= 27;
-    let msg = expect(alloc::str::from_utf8(&data[148..data.len() - 1]).ok()).replace("\\\"", "\"");
+    let msg = unsafe { alloc::str::from_utf8_unchecked(&data[148..data.len() - 1]) }
+        .replace("\\\"", "\"");
     // log(&msg);
 
     // create ethereum signed message hash
